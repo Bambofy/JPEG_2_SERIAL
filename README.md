@@ -11,7 +11,9 @@
  ## Usage
  
  With the JPG_2_SERIAL.exe in the same folder as FILENAME.JPG and a sub-directory called IMAGES/ which contains multiple images.
+ 
  ./JPG_2_SERIAL.exe -input=FILENAME.JPG -mode=single -baud_rate=9600 -port_name=COM4
+ 
  ./JPG_2_SERIAL.exe -input=DIRECTORY/ -mode=sequence -baud_rate=9600 -port_name=COM4
  
  ## Available Arguments
