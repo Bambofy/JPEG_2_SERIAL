@@ -1,7 +1,7 @@
 
  # JPEG 2 SERIAL
  
- JPG 2 SERIAL is a command line tool for uploading an image, or multiple images, over
+ JPG 2 SERIAL is a cross-platform command line tool built with .NET Core for uploading an image, or multiple images, over
  a serial connection to an awaiting device.
  
  ## Notes
