@@ -17,7 +17,7 @@
  ## Available Arguments
  
 	|	Argument Name	|					Valid Input							|	Optional?	|	Description													|
-	|-------------------|-------------------------------------------------------|---------------|---------------------------------------------------------------|
+	|--|--|--|--|
 	|	-input			|														|	NO			|	Set the target file or directory (see the mode argument).	|
 	|	-buffer_size	|	Default: 1024										|	YES			|	Sets the number of byte wrote in one buffer.				|
 	|	-delay_time		|	Default: 10ms										|	YES			|	Sets the amount of time between each buffer write.			|
