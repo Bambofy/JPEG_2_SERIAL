@@ -26,6 +26,7 @@ using System.Threading;
 ///	|	Argument Name	|					Valid Input							|	Optional?	|	Description													|
 ///	|-------------------|-------------------------------------------------------|---------------|---------------------------------------------------------------|
 ///	|	-input			|														|	NO			|	Set the target file or directory (see the mode argument).	|
+///	|	-slot			|	Default: 0											|	NO			|	Sets the 512KB slot to write to.							|
 ///	|	-buffer_size	|	Default: 1024										|	YES			|	Sets the number of byte wrote in one buffer.				|
 ///	|	-delay_time		|	Default: 10ms										|	YES			|	Sets the amount of time between each buffer write.			|
 ///	|	-mode			|	single,sequence										|	NO			|	Single file upload or upload a directory or images?			|
@@ -62,6 +63,7 @@ namespace JPG_2_SERIAL
 			configurationSettings.Add("HANDSHAKE", "");
 			configurationSettings.Add("READ_TIMEOUT", "500");
 			configurationSettings.Add("WRITE_TIMEOUT", "500");
+			configurationSettings.Add("SLOT", "0");
 
 
 			// find each command in the list of argument given.
@@ -124,8 +126,6 @@ namespace JPG_2_SERIAL
 		{
 			_configurationSettings = pConfigurationSettings;
 
-
-
 			Console.WriteLine("Configuring serial port...");
 
 			_serialPort = new SerialPort();
@@ -153,7 +153,6 @@ namespace JPG_2_SERIAL
 			Console.WriteLine("Done!");
 
 
-
 			if (_configurationSettings["MODE"] == "single")
 			{
 				this.SendImage();
@@ -166,8 +165,13 @@ namespace JPG_2_SERIAL
 
 
 		private void SendImage()
-		{
-			Console.WriteLine("Sending individual image: " + _configurationSettings["INPUT"]);
+		{          
+			// parse the slot number.
+			byte slotNumber = Convert.ToByte(_configurationSettings["SLOT"]);
+			byte[] slotNumberBuffer = new byte[1];
+			slotNumberBuffer[0] = slotNumber;
+
+			Console.WriteLine("Sending individual image: " + _configurationSettings["INPUT"] + " to slot number: " + slotNumber);
 
 			// stream the image byte by byte to the serial port.
 
@@ -184,6 +188,9 @@ namespace JPG_2_SERIAL
 			{
 				// open serial port.
 				_serialPort.Open();
+
+				// write the slot number first.
+				_serialPort.Write(slotNumberBuffer, 0, 1);
 
 				// read buffersize into buffer.
 				int bytesReadFromFile = imageFileStream.Read(buffer, 0, bufferSize);
@@ -219,7 +226,12 @@ namespace JPG_2_SERIAL
 
 		private void SendImageSequence()
 		{
-			Console.WriteLine("Sending sequence of images from directory: " + _configurationSettings["INPUT"]);
+			// parse the slot number.
+			byte slotNumber = Convert.ToByte(_configurationSettings["SLOT"]);
+			byte[] slotNumberBuffer = new byte[1];
+			slotNumberBuffer[0] = slotNumber;
+
+			Console.WriteLine("Sending sequence of images from directory: " + _configurationSettings["INPUT"] + " to slot number: " + slotNumber);
 
 			// stream the image byte by byte to the serial port.
 
@@ -236,6 +248,8 @@ namespace JPG_2_SERIAL
 			{
 				// open serial port.
 				_serialPort.Open();
+
+				_serialPort.Write(slotNumberBuffer, 0, 1);
 
 				using (FileStream imageFileStream = File.OpenRead(filePathsInDirectory))
 				{
@@ -267,6 +281,9 @@ namespace JPG_2_SERIAL
 
 				// close the serial port.
 				_serialPort.Close();
+
+				// automatically increment the slot number.
+				slotNumber++;
 			}
 
 
