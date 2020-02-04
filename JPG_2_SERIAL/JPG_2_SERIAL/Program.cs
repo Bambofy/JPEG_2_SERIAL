@@ -52,18 +52,18 @@ namespace JPG_2_SERIAL
 			// default settings.
 			Dictionary<String, String> configurationSettings = new Dictionary<string, string>();
 			configurationSettings.Add("INPUT", "");
-			configurationSettings.Add("BUFFER_SIZE", "1024");
-			configurationSettings.Add("DELAY_SIZE", "10");
-			configurationSettings.Add("MODE", "single");
-			configurationSettings.Add("BAUD_RATE", "9600");
 			configurationSettings.Add("PORT_NAME", "");
-			configurationSettings.Add("PARITY", "");
+			configurationSettings.Add("SLOT", "");
+			configurationSettings.Add("BUFFER_SIZE", "256");
+			configurationSettings.Add("DELAY_TIME", "100");
+			configurationSettings.Add("MODE", "single");
+			configurationSettings.Add("BAUD_RATE", "115200");
+			configurationSettings.Add("PARITY", "None");
 			configurationSettings.Add("DATA_BITS", "8");
-			configurationSettings.Add("STOP_BITS", "");
-			configurationSettings.Add("HANDSHAKE", "");
+			configurationSettings.Add("STOP_BITS", "One");
+			configurationSettings.Add("HANDSHAKE", "None");
 			configurationSettings.Add("READ_TIMEOUT", "500");
 			configurationSettings.Add("WRITE_TIMEOUT", "500");
-			configurationSettings.Add("SLOT", "0");
 
 
 			// find each command in the list of argument given.
@@ -191,6 +191,9 @@ namespace JPG_2_SERIAL
 
 				// write the slot number first.
 				_serialPort.Write(slotNumberBuffer, 0, 1);
+
+				// give Arduino some time so wipe slot
+				Thread.Sleep(3000);
 
 				// read buffersize into buffer.
 				int bytesReadFromFile = imageFileStream.Read(buffer, 0, bufferSize);
