@@ -91,7 +91,7 @@ namespace JPG_2_SERIAL
 
 
 				// convert this input and compare it to the default configuration.
-				string uppercaseArgName = argumentName.ToUpper();
+				string uppercaseArgName = argumentName.ToUpper().Trim('-');
 
 				// if it exists in the settings dictionary, overwrite the key's value.
 				if (configurationSettings.ContainsKey(uppercaseArgName))
